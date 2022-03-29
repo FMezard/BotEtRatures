@@ -1,18 +1,18 @@
 import csv
 import tweepy
 import os
-from env_variables import SECRET_CONSUMER_KEY, SECRET_TOKEN, CONSUMER_KEY, ACCESS_TOKEN, BEARER
+# from env_variables import SECRET_CONSUMER_KEY, SECRET_TOKEN, CONSUMER_KEY, ACCESS_TOKEN, BEARER
 
 
 
 
 def twitter_authentification():
     client = tweepy.Client(
-        consumer_key=CONSUMER_KEY,
-        consumer_secret=SECRET_CONSUMER_KEY,
-        access_token=ACCESS_TOKEN,
-        access_token_secret=SECRET_TOKEN,
-        bearer_token=BEARER
+        consumer_key=os.getenv("CONSUMER_KEY"),
+        consumer_secret=os.getenv("SECRET_CONSUMER_KEY"),
+        access_token=os.getenv("ACCESS_TOKEN"),
+        access_token_secret=os.getenv("SECRET_TOKEN"),
+        bearer_token=os.getenv("BEARER")
     )
     print("token", client.bearer_token)
     return client

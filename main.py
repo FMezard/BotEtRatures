@@ -1,7 +1,7 @@
 import csv
 import tweepy
 import os
-# from env_variables import SECRET_CONSUMER_KEY, SECRET_TOKEN, CONSUMER_KEY, ACCESS_TOKEN, BEARER
+import time
 
 
 
@@ -44,7 +44,6 @@ def pick_a_website():
 
 def create_tweet_content(workpiece):
     tweet_content = f"""{workpiece["Nom d'utilisateur"][:23]} nous a partagé {workpiece['URL']}, une oeuvre de littérature web ! Vous aussi partagez vos coups de coeur du web litteraire et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367"""
-    print("bleee", type(tweet_content))
     return tweet_content
 
 def post_tweet(client, tweet_content):
@@ -52,12 +51,13 @@ def post_tweet(client, tweet_content):
 
 def create_tweet_response(workpiece):
     if workpiece["Description"]:
-        tweet_response = f"""{workpiece["Nom d'utilisateur"][:23]} : {workpiece["Description"]}"""
+        tweet_response = f"""{workpiece["Nom ou pseudo"][:23]} : {workpiece["Description"]}"""
         return tweet_response
     else:
         return None
 def post_response(client, response):
     # id de BotEtRatures : 1507282224890232839
+    time.sleep(4)
     get_tweets = client.get_users_tweets(id=1507282224890232839)
     print(list(get_tweets))
     id = get_tweets[3]["newest_id"]

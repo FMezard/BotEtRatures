@@ -21,12 +21,12 @@ def twitter_authentification():
 def pick_a_website():
     with open('litterature_numerique.tsv', "r", newline='\n', encoding="UTF-8") as csvfile:
         dictreader = csv.DictReader(csvfile, delimiter='\t', quotechar='"')
-        data_litte = list(dictreader)
+    data_litte = list(dictreader)
     with open('tweeted_litt_num.tsv', "r", newline='\n', encoding="UTF-8") as csvfile:
         dictreader = csv.DictReader(csvfile, delimiter='\t', quotechar='"')
-        already_twitted = list(dictreader)
-        if not already_twitted:
-            already_twitted = []
+    already_twitted = list(dictreader)
+    if not already_twitted:
+        already_twitted = []
     i = 0
     workpiece = data_litte[i]
     if already_twitted:
@@ -43,7 +43,7 @@ def pick_a_website():
     return "Liste tweeted vide"
 
 def create_tweet_content(workpiece):
-    tweet_content = f"""{workpiece["Nom d'utilisateur"][:23]} nous a partagé {workpiece['URL']}, une oeuvre de littérature web ! Vous aussi partagez vos coups de coeur du web litteraire et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367"""
+    tweet_content = f"""{workpiece["Nom ou pseudo"][:23]} nous a partagé {workpiece['URL']}, une oeuvre de littérature web ! Vous aussi partagez vos coups de coeur du web litteraire et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367"""
     return tweet_content
 
 def post_tweet(client, tweet_content):

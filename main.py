@@ -21,10 +21,10 @@ def twitter_authentification():
 def pick_a_website():
     with open('litterature_numerique.tsv', "r", newline='\n', encoding="UTF-8") as csvfile:
         dictreader = csv.DictReader(csvfile, delimiter='\t', quotechar='"')
-    data_litte = list(dictreader)
+        data_litte = list(dictreader)
     with open('tweeted_litt_num.tsv', "r", newline='\n', encoding="UTF-8") as csvfile:
         dictreader = csv.DictReader(csvfile, delimiter='\t', quotechar='"')
-    already_twitted = list(dictreader)
+        already_twitted = list(dictreader)
     if not already_twitted:
         already_twitted = []
     i = 0

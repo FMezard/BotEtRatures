@@ -14,9 +14,15 @@ def twitter_authentification():
         access_token_secret=os.getenv("SECRET_TOKEN"),
         bearer_token=os.getenv("BEARER")
     )
-    print("token", client.bearer_token)
     return client
 
+
+def append_to_tweeted(work):
+    with open("tweeted_litt_num.tsv", 'a+', newline='') as write_obj:
+        # Create a writer object from csv module
+        csv_writer = csv.writer(write_obj)
+        # Add contents of list as last row in the csv file
+        csv_writer.writerow(work)
 
 def pick_a_website():
     with open('litterature_numerique.tsv', "r", newline='\n', encoding="UTF-8") as csvfile:
@@ -43,6 +49,7 @@ def pick_a_website():
     return "Liste tweeted vide"
 
 def create_tweet_content(workpiece):
+    append_to_tweeted(workpiece)
     tweet_content = f"""{workpiece["Nom ou pseudo"][:23]} nous a partagé {workpiece['URL']}, une oeuvre de littérature web ! Vous aussi partagez vos coups de coeur du web litteraire et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367"""
     return tweet_content
 
@@ -57,9 +64,8 @@ def create_tweet_response(workpiece):
         return None
 def post_response(client, response):
     # id de BotEtRatures : 1507282224890232839
-    time.sleep(4)
+    time.sleep(60)
     get_tweets = client.get_users_tweets(id=1507282224890232839)
-    print(list(get_tweets))
     id = get_tweets[3]["newest_id"]
     print(id)
     client.create_tweet(in_reply_to_tweet_id=id, text=response)

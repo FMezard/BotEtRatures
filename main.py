@@ -18,7 +18,7 @@ def twitter_authentification():
 
 
 def append_to_tweeted(work):
-    with open("tweeted_litt_num.tsv", 'a+', newline='') as write_obj:
+    with open("tweeted_litt_num.tsv", 'a+', newline='', encoding="UTF-8") as write_obj:
         # Create a writer object from csv module
         csv_writer = csv.writer(write_obj)
         # Add contents of list as last row in the csv file
@@ -29,27 +29,31 @@ def pick_a_website():
         dictreader = csv.DictReader(csvfile, delimiter='\t', quotechar='"')
         data_litte = list(dictreader)
     with open('tweeted_litt_num.tsv', "r", newline='\n', encoding="UTF-8") as csvfile:
-        dictreader = csv.DictReader(csvfile, delimiter='\t', quotechar='"')
-        already_twitted = list(dictreader)
+        reader = csv.reader(csvfile, delimiter='\t', quotechar='"')
+        already_twitted = list(reader)
+        print(already_twitted)
     if not already_twitted:
         already_twitted = []
     i = 0
     workpiece = data_litte[i]
     if already_twitted:
-        for a_t in already_twitted:
-            if a_t["URL"] == workpiece["URL"]:
+        for a_t in already_twitted[1:]:
+            print("workpiece", workpiece["URL"])
+            if a_t[0] == workpiece["URL"]:
                 i = i+1
                 if i > len(already_twitted)-1:
                     return "Tout a déjà été twitté"
                 workpiece = data_litte[i]
             else:
                 return workpiece
+        return workpiece
     else:
         return workpiece
     return "Liste tweeted vide"
 
 def create_tweet_content(workpiece):
-    append_to_tweeted(workpiece)
+    print(workpiece)
+    append_to_tweeted([workpiece["URL"]])
     tweet_content = f"""{workpiece["Nom ou pseudo"][:23]} nous a partagé {workpiece['URL']}, une oeuvre de littérature web ! Vous aussi partagez vos coups de coeur du web litteraire et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367"""
     return tweet_content
 
@@ -67,16 +71,15 @@ def post_response(client, response):
     time.sleep(60)
     get_tweets = client.get_users_tweets(id=1507282224890232839)
     id = get_tweets[3]["newest_id"]
-    print(id)
     client.create_tweet(in_reply_to_tweet_id=id, text=response)
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    client = twitter_authentification()
+    # client = twitter_authentification()
     workpiece = pick_a_website()
     tweet_content = create_tweet_content(workpiece)
-    post_tweet(client, tweet_content)
-    response = create_tweet_response(workpiece)
-    if response:
-        post_response(client, response)
+    # post_tweet(client, tweet_content)
+    # response = create_tweet_response(workpiece)
+    # if response:
+    #    post_response(client, response)

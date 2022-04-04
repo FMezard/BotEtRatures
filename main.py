@@ -4,8 +4,6 @@ import os
 import time
 
 
-
-
 def twitter_authentification():
     client = tweepy.Client(
         consumer_key=os.getenv("CONSUMER_KEY"),
@@ -18,11 +16,12 @@ def twitter_authentification():
 
 
 def append_to_tweeted(work):
-    with open("tweeted_litt_num.tsv", 'a+', newline='', encoding="UTF-8") as write_obj:
+    with open("tweeted_litt_num.tsv", 'a+', newline='\n', encoding="UTF-8") as write_obj:
         # Create a writer object from csv module
         csv_writer = csv.writer(write_obj)
         # Add contents of list as last row in the csv file
         csv_writer.writerow(work)
+
 
 def pick_a_website():
     with open('litterature_numerique.tsv', "r", newline='\n', encoding="UTF-8") as csvfile:
@@ -31,31 +30,24 @@ def pick_a_website():
     with open('tweeted_litt_num.tsv', "r", newline='\n', encoding="UTF-8") as csvfile:
         reader = csv.reader(csvfile, delimiter='\t', quotechar='"')
         already_twitted = list(reader)
+        already_twitted = [e[0] for e in already_twitted[1:]]
     if not already_twitted:
         already_twitted = []
-    i = 0
-    workpiece = data_litte[i]
-    if already_twitted:
-        for a_t in already_twitted[1:]:
-            if a_t[0] == workpiece["URL"]:
-                i = i+1
-                if i > len(already_twitted)-1:
-                    return "Tout a déjà été twitté"
-                workpiece = data_litte[i]
-            else:
-                return workpiece
-        return workpiece
-    else:
-        return workpiece
-    return "Liste tweeted vide"
+    for workpiece in data_litte :
+        if not workpiece["URL"] in already_twitted:
+            return workpiece
+    return "Tout a déjà été twitté"
+
 
 def create_tweet_content(workpiece):
     append_to_tweeted([workpiece["URL"]])
     tweet_content = f"""{workpiece["Nom ou pseudo"][:23]} nous a partagé {workpiece['URL']}, une oeuvre de littérature web ! Vous aussi partagez vos coups de coeur du web litteraire et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367"""
     return tweet_content
 
+
 def post_tweet(client, tweet_content):
     client.create_tweet(text=tweet_content)
+
 
 def create_tweet_response(workpiece):
     if workpiece["Description"]:
@@ -63,6 +55,8 @@ def create_tweet_response(workpiece):
         return tweet_response
     else:
         return None
+
+
 def post_response(client, response):
     # id de BotEtRatures : 1507282224890232839
     time.sleep(60)

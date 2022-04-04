@@ -30,6 +30,7 @@ def pick_a_website():
     with open('tweeted_litt_num.tsv', "r", newline='\n', encoding="UTF-8") as csvfile:
         reader = csv.reader(csvfile, delimiter='\t', quotechar='"')
         already_twitted = list(reader)
+        print(already_twitted)
         already_twitted = [e[0] for e in already_twitted[1:]]
     if not already_twitted:
         already_twitted = []
@@ -41,7 +42,8 @@ def pick_a_website():
 
 def create_tweet_content(workpiece):
     append_to_tweeted([workpiece["URL"]])
-    tweet_content = f"""{workpiece["Nom ou pseudo"][:23]} nous a partagé {workpiece['URL']}, une oeuvre de littérature web ! Vous aussi partagez vos coups de coeur du web litteraire et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367"""
+    tweet_content = f"""{workpiece['URL']} est l'oeuvre de littérature web du jour, partagée par {workpiece["Nom ou pseudo"][:23]}! 
+    Vous aussi partagez vos coups de coeur du web litteraire et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367"""
     return tweet_content
 
 
@@ -51,7 +53,7 @@ def post_tweet(client, tweet_content):
 
 def create_tweet_response(workpiece):
     if workpiece["Description"]:
-        tweet_response = f"""{workpiece["Nom ou pseudo"][:23]} : {workpiece["Description"]}"""
+        tweet_response = f'"{workpiece["Description"]}", {workpiece["Nom ou pseudo"][:23]} '
         return tweet_response
     else:
         return None

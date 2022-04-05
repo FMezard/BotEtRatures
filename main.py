@@ -2,7 +2,9 @@ import csv
 import tweepy
 import os
 import time
+from datetime import date
 
+FIRST_DAY = date(2022, 0o4, 0o1)
 
 def twitter_authentification():
     client = tweepy.Client(
@@ -27,17 +29,23 @@ def pick_a_website():
     with open('litterature_numerique.tsv', "r", newline='\n', encoding="UTF-8") as csvfile:
         dictreader = csv.DictReader(csvfile, delimiter='\t', quotechar='"')
         data_litte = list(dictreader)
-    with open('tweeted_litt_num.tsv', "r", newline='\n', encoding="UTF-8") as csvfile:
-        reader = csv.reader(csvfile, delimiter='\t', quotechar='"')
-        already_twitted = list(reader)
-        print(already_twitted)
-        already_twitted = [e[0] for e in already_twitted[1:]]
-    if not already_twitted:
-        already_twitted = []
-    for workpiece in data_litte :
-        if not workpiece["URL"] in already_twitted:
-            return workpiece
-    return "Tout a déjà été twitté"
+    try:
+        print((date.today() - FIRST_DAY).days)
+        workpiece = data_litte[(date.today() - FIRST_DAY).days]
+    except IndexError:
+        print("Tout a déjà été twitté")
+    # with open('tweeted_litt_num.tsv', "r", newline='\n', encoding="UTF-8") as csvfile:
+    #     reader = csv.reader(csvfile, delimiter='\t', quotechar='"')
+    #     already_twitted = list(reader)
+    #     print(already_twitted)
+    #     already_twitted = [e[0] for e in already_twitted[1:]]
+    # if not already_twitted:
+    #     already_twitted = []
+    # for workpiece in data_litte :
+    #     if not workpiece["URL"] in already_twitted:
+    #         return workpiece
+    print(workpiece)
+    return workpiece
 
 
 def create_tweet_content(workpiece):

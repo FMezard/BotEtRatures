@@ -50,8 +50,12 @@ def pick_a_website():
 
 def create_tweet_content(workpiece):
     append_to_tweeted([workpiece["URL"]])
-    tweet_content = f"""{workpiece['URL']} est l'oeuvre de littérature web du jour, partagée par {workpiece["Nom ou pseudo"][:23]}! 
-    Vous aussi partagez vos coups de coeur du web litteraire et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367"""
+    if workpiece["Nom ou pseudo"] == "weblitt":
+        tweet_content = f"""{workpiece['URL']} est l'oeuvre de littérature web du jour ! 
+        Vous aussi partagez vos coups de coeur du web et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367"""
+    else:
+        tweet_content = f"""{workpiece['URL']} est l'oeuvre de littérature web du jour, partagée par {workpiece["Nom ou pseudo"][:23]}! 
+        Vous aussi partagez vos coups de coeur du web litteraire et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367"""
     return tweet_content
 
 

@@ -3,6 +3,7 @@ import tweepy
 import os
 import time
 from datetime import date
+from random import randint
 
 FIRST_DAY = date(2022, 0o4, 0o1)
 
@@ -34,25 +35,20 @@ def pick_a_website():
         workpiece = data_litte[(date.today() - FIRST_DAY).days]
     except IndexError:
         print("Tout a déjà été twitté")
-    # with open('tweeted_litt_num.tsv', "r", newline='\n', encoding="UTF-8") as csvfile:
-    #     reader = csv.reader(csvfile, delimiter='\t', quotechar='"')
-    #     already_twitted = list(reader)
-    #     print(already_twitted)
-    #     already_twitted = [e[0] for e in already_twitted[1:]]
-    # if not already_twitted:
-    #     already_twitted = []
-    # for workpiece in data_litte :
-    #     if not workpiece["URL"] in already_twitted:
-    #         return workpiece
-    print(workpiece)
     return workpiece
 
 
 def create_tweet_content(workpiece):
     append_to_tweeted([workpiece["URL"]])
     if workpiece["Nom ou pseudo"] == "weblitt":
-        tweet_content = f"""{workpiece['URL']} est l'oeuvre de littérature web du jour ! 
-        Vous aussi partagez vos coups de coeur du web et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367"""
+        tweet_content_list = [f"""{workpiece['URL']} est l'oeuvre de littérature web du jour ! Vous aussi partagez vos coups de coeur du web et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367""",
+        f"""Connaissiez-vous {workpiece['URL']} ? Maintenant oui ! Si elle vous fait penser à un compte twitter, un site, une fanfic ... faites le savoir à ce bot : https://framaforms.org/litterature-numerique-1647949367""",
+        f"""Allez jeter un coup d'oeil à {workpiece['URL']}, alors qu'en pensez-vous ? Partagez vos coups de coeurs littéraire avec ce bot sur https://framaforms.org/litterature-numerique-1647949367""",
+        f"""Cliquez ici pour une petite pause littéraire : {workpiece['URL']}. Nous avons besoin de vous pour partager toujours plus de littérature sur ce réseau : https://framaforms.org/litterature-numerique-1647949367""",
+        f"""Vous reprendez-bien un petit peu de littérature en ligne ? {workpiece['URL']} ? Et vous, que lisez-vous en ligne ? Faites le moi savoir : https://framaforms.org/litterature-numerique-1647949367"""]
+
+        tweet_content = tweet_content_list[randint(0, 4)]
+
     else:
         tweet_content = f"""{workpiece['URL']} est l'oeuvre de littérature web du jour, partagée par {workpiece["Nom ou pseudo"][:23]}! 
         Vous aussi partagez vos coups de coeur du web litteraire et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367"""

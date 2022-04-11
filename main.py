@@ -17,15 +17,6 @@ def twitter_authentification():
     )
     return client
 
-
-def append_to_tweeted(work):
-    with open("tweeted_litt_num.tsv", 'a+', newline='\n', encoding="UTF-8") as write_obj:
-        # Create a writer object from csv module
-        csv_writer = csv.writer(write_obj)
-        # Add contents of list as last row in the csv file
-        csv_writer.writerow(work)
-
-
 def pick_a_website():
     with open('litterature_numerique.tsv', "r", newline='\n', encoding="UTF-8") as csvfile:
         dictreader = csv.DictReader(csvfile, delimiter='\t', quotechar='"')
@@ -39,7 +30,6 @@ def pick_a_website():
 
 
 def create_tweet_content(workpiece):
-    append_to_tweeted([workpiece["URL"]])
     if workpiece["Nom ou pseudo"] == "weblitt":
         tweet_content_list = [f"""{workpiece['URL']} est l'oeuvre de littérature web du jour ! Vous aussi partagez vos coups de coeur du web et participez à cultiver ce bot : https://framaforms.org/litterature-numerique-1647949367""",
         f"""Connaissiez-vous {workpiece['URL']} ? Maintenant oui ! Si elle vous fait penser à un compte twitter, un site, une fanfic ... faites le savoir à ce bot : https://framaforms.org/litterature-numerique-1647949367""",
@@ -61,7 +51,9 @@ def post_tweet(client, tweet_content):
 
 def create_tweet_response(workpiece):
     if workpiece["Description"]:
-        tweet_response = f'"{workpiece["Description"]}", {workpiece["Nom ou pseudo"][:23]} '
+        tweet_response = f'"{workpiece["Description"]}"'
+        if not "weblitt" in workpiece["Nom ou pseudo"][:23]:
+            tweet_response.append(f""", {workpiece["Nom ou pseudo"][:23]} """)
         return tweet_response
     else:
         return None
